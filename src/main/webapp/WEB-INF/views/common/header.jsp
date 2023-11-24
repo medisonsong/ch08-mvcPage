@@ -10,6 +10,21 @@
 		<li>
 			<a href="${pageContext.request.contextPath}/board/list.do">게시판</a>
 		</li>
+		
+		
+		<c:if test="${!empty user_num}">
+		<li><a href="${pageContext.request.contextPath}/member/myPage.do">MY페이지</a></li>
+		</c:if>
+		
+		<c:if test="${!empty user_num && !empty user_photo}"> 
+		<li class="menu-profile"><img src="${pageContext.request.contextPath}/upload/${user_photo}" width="25" height="25" class="my-photo"></li>
+		</c:if>
+		
+		<c:if test="${!empty user_num && empty user_photo}"> 
+		<li class="menu-profile"><img src="${pageContext.request.contextPath}/images/face.png" width="25" height="25" class="my-photo"></li>
+		</c:if>
+		
+		
 		<c:if test="${!empty user_num}"> <%-- 데이터가 비어있지 않을 경우 (로그인된 상태) --%>
 		<li class="menu-logout">
 			[<span>${user_id}</span>]
