@@ -305,10 +305,23 @@ public class MemberDAO {
 		try {
 			//커넥션풀로부터 커넥션 할당
 			conn = DBUtil.getConnection();
+			if(keyword!=null && !"".equals(keyword)) {
+				//검색 처리
+				if(keyfield.equals("1")) sub_sql += "WHERE id LIKE ?"; // equals검색을 할수도 있지만 비슷한거 여러개 뜨게 하고싶어서
+				else if(keyfield.equals("2")) sub_sql += "WHERE name LIKE ?";
+				else if(keyfield.equals("3")) sub_sql += "WHERE email LIKE ?";
+			}
+			
 			//SQL문 생성
-			sql = "SELECT COUNT(*) FROM zmember";
+			sql = "SELECT COUNT(*) FROM zmember LEFT OUTER JOIN zmember_detail USING(mem_num) " + sub_sql;
 			//PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
+			
+			//sub_sql ?에 데이터 바인딩
+			if(keyword!=null && !"".equals(keyword)) {
+				pstmt.setString(1, "%"+keyword+"%");
+			}
+			
 			//SQL문 실행
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
@@ -337,17 +350,29 @@ public class MemberDAO {
 		try {
 			//커넥션풀로부터 커넥션 할당
 			conn = DBUtil.getConnection();
+			if(keyword!=null && !"".equals(keyword)) {
+				//검색 처리
+				if(keyfield.equals("1")) sub_sql += "WHERE id LIKE ?";
+				else if(keyfield.equals("2")) sub_sql += "WHERE name LIKE ?";
+				else if(keyfield.equals("3")) sub_sql += "WHERE email LIKE ?";
+			}
+			
 			//SQL문 작성
 			sql = "SELECT * FROM (SELECT a.*, rownum rnum FROM "
 					+ "(SELECT * FROM zmember m LEFT OUTER JOIN "
-					+ "zmember_detail d ON m.mem_num=d.mem_num "
-					+ "ORDER BY m.mem_num DESC NULLS LAST)a) "
+					+ "zmember_detail d ON m.mem_num=d.mem_num " + sub_sql //order by전에 넣어줌
+					+ " ORDER BY m.mem_num DESC NULLS LAST)a) "
 					+ "WHERE rnum>=? AND rnum<=?";
 			//PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
-			pstmt.setInt(1, start);
-			pstmt.setInt(2, end);
+			
+			if(keyword!=null && !"".equals(keyword)) {
+				pstmt.setString(++cnt, "%"+keyword+"%");
+			}
+			
+			pstmt.setInt(++cnt, start);
+			pstmt.setInt(++cnt, end);
 			//SQL문 실행
 			rs = pstmt.executeQuery();
 			
@@ -370,7 +395,6 @@ public class MemberDAO {
 				
 				list.add(member);
 			}
-			
 		}catch(Exception e) {
 			throw new Exception(e);
 		}finally {
@@ -382,6 +406,29 @@ public class MemberDAO {
 	
 	
 	//회원 등급 수정 (회원 정보 중 등급만 변경 가능)
-	
+	public void updateMemberByAdmin(int auth, int mem_num)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			//커넥션풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			//SQL문 작성
+			sql ="UPDATE zmember SET auth=? WHERE mem_num=?";
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			pstmt.setInt(1, auth);
+			pstmt.setInt(2, mem_num);
+			//SQL문 실행
+			pstmt.executeUpdate();
+			
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt, conn);
+		}
+	}
 	
 }
