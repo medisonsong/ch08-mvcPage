@@ -318,7 +318,14 @@ public class BoardDAO {
 			conn.setAutoCommit(false);
 			
 			//좋아요 삭제
+			sql = "DELETE FROM zboard_fav WHERE board_num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, board_num);
+			pstmt.executeUpdate();
+			
+			
 			//댓글 삭제
+			
 			//부모글 삭제
 			sql = "DELETE FROM zboard WHERE board_num=?";
 			pstmt3 = conn.prepareStatement(sql);
@@ -420,7 +427,6 @@ public class BoardDAO {
 			//?에 데이터 바인딩
 			pstmt.setInt(1, favVO.getBoard_num());
 			pstmt.setInt(2, favVO.getMem_num());
-			
 			//SQL문 실행
 			//좋아요를 누르면 행이 만들어짐 --> 행이 있으면 좋아요 누른거/ 없으면 좋아요 없는거
 			rs = pstmt.executeQuery();
