@@ -235,3 +235,8 @@ ul.detail-sub li:last-child{
 	line-height:250%;
 }
 
+/* 좋아요 커서
+------------------------------*/
+#output_fav{
+	cursor:pointer;
+}
