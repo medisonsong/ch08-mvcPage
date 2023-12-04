@@ -7,10 +7,10 @@ $(function(){
 			data:{board_num:$('#output_fav').attr('data-num')},
 			dataType:'json',
 			success:function(param){
-				displayFav(param);	
+				displayFav(param);
 			},
 			error:function(){
-				alert('네트워크 오류 발생!');
+				alert('네트워크 오류 발생');
 			}
 		});
 	}
@@ -19,7 +19,6 @@ $(function(){
 		$.ajax({
 			url:'writeFav.do',
 			type:'post',
-			 //이벤트가 발생한 태그에 접근해서 attr data-num이라는 속성을 넣어놨는데 그걸 가져옴
 			data:{board_num:$(this).attr('data-num')},
 			dataType:'json',
 			success:function(param){
@@ -32,12 +31,11 @@ $(function(){
 				}
 			},
 			error:function(){
-				alert('네트워크 오류 발생!');
+				alert('네트워크 오류 발생');
 			}
 		});
 	});
-	
-	//좋아요 표시 함수
+	//좋아요 표시
 	function displayFav(param){
 		let output;
 		if(param.status=='yesFav'){//좋아요 선택
@@ -47,11 +45,13 @@ $(function(){
 		}
 		
 		//문서 객체에 설정
-		$('#output_fav').attr('src', output);
+		$('#output_fav').attr('src',output);
 		$('#output_fcount').text(param.count);
 	}
-	
 	//초기 데이터 호출
-	selectFav(); 
+	selectFav();
 });
+
+
+
 

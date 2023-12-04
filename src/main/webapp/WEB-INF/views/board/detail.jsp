@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/board.fav.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/board.reply.js"></script>
 </head>
 <body>
 <div class="page-main">
@@ -17,11 +18,13 @@
 		<h2>${board.title}</h2>
 		<ul class="detail-info">
 			<li>
-				<c:if test="${!empty board.photo}"> <%-- photo가 있을 경우 --%>
-				<img src="${pageContext.request.contextPath}/upload/${board.photo}" width="40" height="40" class="my-photo">
+				<c:if test="${!empty board.photo}">
+				<img src="${pageContext.request.contextPath}/upload/${board.photo}" 
+				                           width="40" height="40" class="my-photo">	
 				</c:if>
-				<c:if test="${empty board.photo}"> <%-- photo가 없을 경우 (기본사진) --%>
-				<img src="${pageContext.request.contextPath}/images/face.png" width="40" height="40" class="my-photo">
+				<c:if test="${empty board.photo}">
+				<img src="${pageContext.request.contextPath}/images/face.png" 
+				                           width="40" height="40" class="my-photo">	
 				</c:if>
 			</li>
 			<li>
@@ -30,8 +33,7 @@
 			</li>
 		</ul>
 		<hr size="1" noshade="noshade" width="100%">
-		
-		<c:if test="${!empty board.filename}"> <%-- file이 있을 경우 --%>
+		<c:if test="${!empty board.filename}">
 		<div class="align-center">
 			<img src="${pageContext.request.contextPath}/upload/${board.filename}" class="detail-img">
 		</div>
@@ -40,26 +42,27 @@
 			${board.content}
 		</p>
 		<hr size="1" noshade="noshade" width="100%">
-		
 		<ul class="detail-sub">
 			<li>
-				<%-- 좋아요 처리 --%>
-				<%-- 태그에 속성은 못만드는데 data- 라고 해서 만들 수 있음 --%>
-				<img id="output_fav" data-num="${board.board_num}" src="${pageContext.request.contextPath}/images/fav01.gif" width="50"> 
+				<%-- 좋아요 --%>
+				<img id="output_fav" data-num="${board.board_num}" 
+				  src="${pageContext.request.contextPath}/images/fav01.gif" 
+				                                               width="50">
 				좋아요
-				<span id="output_fcount"></span>
+				<span id="output_fcount"></span>                                               
 			</li>
 			<li>
-				<c:if test="${!empty board.modify_date}"> <%-- 수정일이 있다면 수정일도 보이게 --%>
+				<c:if test="${!empty board.modify_date}">
 					최근 수정일 : ${board.modify_date}
 				</c:if>
 				작성일 : ${board.reg_date}
-				<%-- 로그인한 회원번호와 작성자 회원번호가 일치해야 수정,삭제 가능 --%>
-				<c:if test="${user_num == board.mem_num}"> <%-- session == request 조건 체크 --%>
-					<input type="button" value="수정" onclick="location.href='updateForm.do?board_num=${board.board_num}'">
-					<input type="button" value="삭제" id="delete_btn">
-				<%-- script를 바로 밑에 넣는 이유: 로그인한 사람과 작성자가 일치해야 보이게 하려고 (다르면 안보임) --%>	
-				<script type="text/javascript"> 
+				<%-- 로그인한 회원번호와 작성자 회원번호가 일치해야
+				     수정,삭제 가능 --%>
+				<c:if test="${user_num == board.mem_num}">
+				<input type="button" value="수정"
+				 onclick="location.href='updateForm.do?board_num=${board.board_num}'">
+				<input type="button" value="삭제" id="delete_btn">
+				<script type="text/javascript">
 					let delete_btn = document.getElementById('delete_btn');
 					//이벤트 연결
 					delete_btn.onclick=function(){
@@ -68,15 +71,47 @@
 							location.replace('delete.do?board_num=${board.board_num}');
 						}
 					};
-				</script>	
-				</c:if>
+				</script>
+				</c:if>     
 			</li>
 		</ul>
 		<!-- 댓글 시작 -->
+		<div id="reply_div">
+			<span class="re-title">댓글 달기</span>
+			<form id="re_form">
+				<input type="hidden" name="board_num" 
+				 value="${board.board_num}" id="board_num">
+				<textarea rows="3" cols="50" name="re_content"
+				  id="re_content" class="rep-content"
+				  <c:if test="${empty user_num}">disabled="disabled"</c:if>><c:if test="${empty user_num}">로그인해야 작성할 수 있습니다.</c:if></textarea>
+				<c:if test="${!empty user_num}">
+				<div id="re_first">
+					<span class="letter-count">300/300</span>
+				</div>   
+				<div id="re_second" class="align-right">
+					<input type="submit" value="전송">
+				</div>
+				</c:if>
+			</form>
+		</div>
 		<!-- 댓글 목록 출력 시작 -->
+		<div id="output"></div>
+		<div class="paging-button" style="display:none;">
+			<input type="button" value="다음글 보기">
+		</div>
+		<div id="loading" style="display:none;">
+			<img src="${pageContext.request.contextPath}/images/loading.gif" width="50" height="50">
+		</div>
 		<!-- 댓글 목록 출력 끝 -->
 		<!-- 댓글 끝 -->
 	</div>
 </div>
 </body>
-</html>	
+</html>
+
+
+
+
+
+
+
