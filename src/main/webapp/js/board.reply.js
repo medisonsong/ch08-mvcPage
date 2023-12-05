@@ -157,6 +157,7 @@ $(function(){
 		modifyUI += ' <input type="submit" value="수정">';
 		modifyUI += ' <input type="button" value="취소" class="re-reset">';
 		modifyUI += '</div>';
+		modifyUI += '<hr size="1" noshade width="96%">'; // 선을 넣어서 아이디가 밀려나는 현상 제거
 		modifyUI += '</form>';
 		
 		//이전에 이미 수정하는 댓글이 있을 경우 수정 버튼을 클릭하면 숨겨져있는 div(class=sub-item)을 
@@ -220,7 +221,6 @@ $(function(){
 					
 					//댓글 수정 시간 (1분 전, 1시간 전 이렇게)
 					$('#mre_form').parent().find('.modify-date').text('최근 수정일 : 5초미만'); //modify-date: 날짜 표시하는 클래스 / #mre_form의 부모-item
-					
 					
 					//수정폼 삭제 및 초기화
 					initModifyForm();

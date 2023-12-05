@@ -7,6 +7,10 @@
 </div>
 <div id="main_nav">
 	<ul>
+				<%-- 쇼핑몰 게시판 --%>
+		<li>
+			<a href="${pageContext.request.contextPath}/item/itemList.do">상품목록</a>
+		</li>
 		<li>
 			<a href="${pageContext.request.contextPath}/board/list.do">게시판</a>
 		</li>
@@ -15,6 +19,9 @@
 		<c:if test="${!empty user_num && user_auth == 9}">
 		<li>
 			<a href="${pageContext.request.contextPath}/member/adminList.do">회원관리</a>
+		</li>
+		<li>
+			<a href="${pageContext.request.contextPath}/item/adminList.do">상품관리</a> <%-- 쇼핑몰 상품관리 메뉴 추가 --%>
 		</li>
 		</c:if>
 		
