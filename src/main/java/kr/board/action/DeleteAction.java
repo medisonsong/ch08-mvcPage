@@ -15,26 +15,27 @@ public class DeleteAction implements Action{
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		Integer user_num = (Integer)session.getAttribute("user_num");
-		
 		if(user_num == null) {
 			return "redirect:/member/loginForm.do";
 		}
 		
-		int board_num = Integer.parseInt(request.getParameter("board_num"));
+		int board_num = Integer.parseInt(
+				                request.getParameter("board_num"));
 		BoardDAO dao = BoardDAO.getInstance();
-		BoardVO db_board = dao.getBoard(board_num); // 작성자 회원번호
-		
-		if(user_num!=db_board.getMem_num()) { //로그인한 회원번호와 작성자 회원번호가 불일치
+		BoardVO db_board = dao.getBoard(board_num);
+		if(user_num != db_board.getMem_num()) {
+			//로그인한 회원번호와 작성자 회원번호가 불일치
 			return "/WEB-INF/views/common/notice.jsp";
 		}
 		
 		//로그인한 회원번호와 작성자 회원번호가 일치
 		dao.deleteBoard(board_num);
-		
-		//쓰레기 파일도 삭제
+		//파일 삭제
 		FileUtil.removeFile(request, db_board.getFilename());
 		
 		return "redirect:/board/list.do";
 	}
 
 }
+
+

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,7 +25,6 @@
 					</a>
 				</div>
 			</c:forEach>
-			<%-- float를 해제해야 밑에 있는 것들이 위에 영역으로 안올라옴 --%>
 			<div class="float-clear">
 				<hr width="100%" size="1" noshade="noshade">
 			</div>
@@ -34,3 +33,10 @@
 </div>
 </body>
 </html>
+
+
+
+
+
+
+

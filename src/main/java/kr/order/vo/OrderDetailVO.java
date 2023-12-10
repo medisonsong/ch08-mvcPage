@@ -1,14 +1,13 @@
 package kr.order.vo;
 
 public class OrderDetailVO {
-	private int detail_num;				//주문 상세 번호
-	private int item_num;				//상품 번호
-	private String item_name;				//상품명
-	private int item_price;				//상품가격
-	private int item_total;				//동일 상품 주문 가격
-	private int order_quantity;			//주문 수량
-	private int order_num;				//주문 번호
-	
+	private int detail_num;		//주문상세번호
+	private int item_num;		//상품번호
+	private String item_name;	//상품명
+	private int item_price;		//가격
+	private int item_total;		//동일상품의 총주문가격
+	private int order_quantity; //주문수량
+	private int order_num;		//주문번호	
 	
 	public int getDetail_num() {
 		return detail_num;
@@ -52,6 +51,4 @@ public class OrderDetailVO {
 	public void setOrder_num(int order_num) {
 		this.order_num = order_num;
 	}
-	
-	
 }

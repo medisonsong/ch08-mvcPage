@@ -292,12 +292,11 @@ public class BoardDAO {
 			pstmt.setInt(1, board_num);
 			pstmt.executeUpdate();
 			
-			//댓글 삭제 (글이 부모고 댓글이 자식이라 글이 삭제되면 댓글도 삭제되어야 함)
+			//댓글 삭제
 			sql = "DELETE FROM zboard_reply WHERE board_num=?";
 			pstmt2 = conn.prepareStatement(sql);
 			pstmt2.setInt(1, board_num);
 			pstmt2.executeUpdate();
-			
 			
 			//부모글 삭제
 			sql = "DELETE FROM zboard WHERE board_num=?";
@@ -560,12 +559,14 @@ public class BoardDAO {
 			while(rs.next()) {
 				BoardReplyVO reply = new BoardReplyVO();
 				reply.setRe_num(rs.getInt("re_num"));
-				//날짜 -> 1분 전, 1시간 전, 1일 전 형식의 문자열로 변환 (선생님이 주신 파일로 감쌈)
-				reply.setRe_date(DurationFromNow.getTimeDiffLabel(rs.getString("re_date")));
-				
+				//날짜 -> 1분전, 1시간전, 1일전 형식의 문자열로 변환
+				reply.setRe_date(
+						DurationFromNow.getTimeDiffLabel(
+								rs.getString("re_date")));
 				if(rs.getString("re_modifydate")!=null) {
 					reply.setRe_modifydate(
-							DurationFromNow.getTimeDiffLabel(rs.getString("re_modifydate")));
+						DurationFromNow.getTimeDiffLabel(
+								rs.getString("re_modifydate")));
 				}
 				reply.setRe_content(StringUtil.useBrNoHtml(
 						        rs.getString("re_content")));
@@ -582,8 +583,6 @@ public class BoardDAO {
 		}		
 		return list;
 	}
-	
-	
 	//댓글 상세(댓글 수정,삭제시 작성자 회원번호 체크 용도로 사용)
 	public BoardReplyVO getReplyBoard(int re_num)throws Exception{
 		Connection conn = null;
@@ -593,7 +592,7 @@ public class BoardDAO {
 		String sql = null;
 		
 		try {
-			//커넥션 풀로부터 커넥션 할당
+			//커넥션풀로부터 커넥션을 할당
 			conn = DBUtil.getConnection();
 			//SQL문 작성
 			sql = "SELECT * FROM zboard_reply WHERE re_num=?";
@@ -601,9 +600,8 @@ public class BoardDAO {
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
 			pstmt.setInt(1, re_num);
-			//SQL문을 실행해서 결과행을 rs에 담음
+			//SQL문을 실행해서 결과행을 ResultSet에 담음
 			rs = pstmt.executeQuery();
-			
 			if(rs.next()) {
 				reply = new BoardReplyVO();
 				reply.setRe_num(rs.getInt("re_num"));
@@ -613,22 +611,22 @@ public class BoardDAO {
 			throw new Exception(e);
 		}finally {
 			DBUtil.executeClose(rs, pstmt, conn);
-		}
+		}		
 		return reply;
 	}
-	
-	
 	//댓글 수정
-	public void updateReplayBoard(BoardReplyVO reply)throws Exception{
+	public void updateReplayBoard(BoardReplyVO reply)
+			                              throws Exception{
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String sql = null;
 		
 		try {
-			//커넥션 풀로부터 커넥션을 할당
+			//커넥션풀로부터 커넥션을 할당
 			conn = DBUtil.getConnection();
 			//SQL문 작성
-			sql = "UPDATE zboard_reply SET re_content=?, re_modifydate=SYSDATE, re_ip=? WHERE re_num=?";
+			sql = "UPDATE zboard_reply SET re_content=?,"
+				+ "re_modifydate=SYSDATE,re_ip=? WHERE re_num=?";
 			//PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
 			//?에 데이터 바인딩
@@ -643,34 +641,29 @@ public class BoardDAO {
 			DBUtil.executeClose(null, pstmt, conn);
 		}
 	}
-	
-	
-	
-	
 	//댓글 삭제
-	 public void deleteReplyBoard(int re_num)throws Exception{
-		 Connection conn = null;
-	     PreparedStatement pstmt = null;
-	     String sql = null;
-	      
-	     try {
-	        //커넥션풀로부터 커넥션 할당
-	        conn = DBUtil.getConnection();
-	        //SQL문 작성
-	        sql = "DELETE FROM zboard_reply WHERE re_num=?";
-	        //PreparedStatement 객체 생성
-	        pstmt = conn.prepareStatement(sql);
-	        //?에 데이터 바인딩
-	        pstmt.setInt(1, re_num);
-	        //SQL문 실행
-	        pstmt.executeUpdate();
-	      }catch(Exception e) {
-	         throw new Exception(e);
-	      }finally {
-	         DBUtil.executeClose(null, pstmt, conn);
-	      }
-	   }
-	
+	public void deleteReplyBoard(int re_num)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		
+		try {
+			//커넥션풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			//SQL문 작성
+			sql = "DELETE FROM zboard_reply WHERE re_num=?";
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			pstmt.setInt(1, re_num);
+			//SQL문 실행
+			pstmt.executeUpdate();
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt, conn);
+		}		
+	}
 }
 
 

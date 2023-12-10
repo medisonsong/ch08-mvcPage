@@ -3,16 +3,16 @@ package kr.item.vo;
 import java.sql.Date;
 
 public class ItemVO {
-	private int item_num;		//상품 번호
+	private int item_num;		//상품번호
 	private String name;		//상품명
 	private int price;			//가격
-	private int quantity; 		//수량
+	private int quantity;		//수량
 	private String photo1;		//상품사진1
 	private String photo2;		//상품사진2
 	private String detail;		//내용
 	private Date reg_date;		//등록일
 	private Date modify_date;	//수정일
-	private int status;			//1미표시,2표시 (상품 판매 가능 여부)
+	private int status;			//1 미표시, 2 표시 (상품 판매 가능 여부)
 	
 	public int getItem_num() {
 		return item_num;

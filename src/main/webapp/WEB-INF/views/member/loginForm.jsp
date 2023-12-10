@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
-//조건값이 아이디 비밀번호 두개라서 반복문 안쓰고 그냥 입력
 $(function(){
 	$('#login_form').submit(function(){
 		if($('#id').val().trim()==''){
@@ -21,7 +20,7 @@ $(function(){
 			$('#passwd').val('').focus();
 			return false;
 		}
-	});	
+	});
 });
 </script>
 </head>
@@ -33,20 +32,29 @@ $(function(){
 		<form id="login_form" action="login.do" method="post">
 			<ul>
 				<li class="floating-label">
-					<input type="text" class="form-input" placeholder="아이디" name="id" id="id" maxlength="12" autocomplete="off">
-					<label for="id">아이디</label>
+					<input type="text" class="form-input"
+					  placeholder="아이디" name="id" id="id"
+					  maxlength="12" autocomplete="off">
+					<label for="id">아이디</label>  
 				</li>
 				<li class="floating-label">
-					<input type="password" class="form-input" placeholder="비밀번호" name="passwd" id="passwd" maxlength="12">
-					<label for="passwd">비밀번호</label>
+					<input type="password" class="form-input"
+					  placeholder="비밀번호" name="passwd"
+					  id="passwd" maxlength="12">
+					<label for="passwd">비밀번호</label>  
 				</li>
 			</ul>
 			<div class="align-center">
 				<input type="submit" value="로그인">
-				<input type="button" value="홈으로" onclick="location.href='${pageContext.request.contextPath}/main/main.do'">
+				<input type="button" value="홈으로"
+				  onclick="location.href='${pageContext.request.contextPath}/main/main.do'">
 			</div>
 		</form>
 	</div>
 </div>
 </body>
 </html>
+
+
+
+

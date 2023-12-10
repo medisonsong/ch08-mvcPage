@@ -3,22 +3,21 @@ package kr.order.vo;
 import java.sql.Date;
 
 public class OrderVO {
-	private int order_num;				//주문번호
-	private String item_name;			//대표 상품명
-	private int	order_total;			//총 주문 금액
-	private int payment;				//지불 방식
-	private int status;					//배송 상태
-	private String receive_name;		//수령인 이름
-	private String receive_post;		//배송지 우편번호
-	private String receive_address1;	//배송지 주소
-	private String receive_address2;	//배송지 상세 주소
-	private String receive_phone;		//수령인 전화번호
-	private String notice;				//남기실 말씀
-	private Date reg_date;				//주문일
-	private Date modify_date;			//주문 수정일
-	private int mem_num;				//주문자 회원번호
-	private String id;					//주문자 id
-	
+	private int order_num;			//주문번호
+	private String item_name;		//대표 상품명
+	private int order_total;		//총주문 금액
+	private int payment;			//지불방식
+	private int status;				//배송상태
+	private String receive_name;	//상품 수령자
+	private String receive_post;	//배송지 우편번호
+	private String receive_address1;//배송지 주소
+	private String receive_address2;//배송지 상세 주소
+	private String receive_phone;	//배송지 전화번호
+	private String notice;			//남기실 말씀
+	private Date reg_date;			//주문날짜
+	private Date modify_date;		//주문정보 변경일
+	private int mem_num;			//주문자 회원번호
+	private String id;				//주문자 id
 	
 	public int getOrder_num() {
 		return order_num;
@@ -110,6 +109,8 @@ public class OrderVO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	
 }
+
+
+
+

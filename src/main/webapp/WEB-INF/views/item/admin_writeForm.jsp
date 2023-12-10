@@ -10,15 +10,15 @@
 <script type="text/javascript">
 $(function(){
 	$('#write_form').submit(function(){
-		if($('input[type=radio]:checked').length < 1){//배열 형태로 인식
+		if($('input[type=radio]:checked').length < 1){
 			alert('상품표시여부를 지정하세요!');
 			return false;
-		} 
+		}
 		
 		let items = document.querySelectorAll('.input-check');
-		for(let i=0; i<items.length; i++){
+		for(let i=0;i<items.length;i++){
 			if(items[i].value.trim()==''){
-				let label = document.querySelector('label[for="'+items[i].id+'"]')
+				let label = document.querySelector('label[for="'+items[i].id+'"]');
 				alert(label.textContent + ' 항목은 필수 입력');
 				items[i].value = '';
 				items[i].focus();
@@ -34,44 +34,62 @@ $(function(){
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="content-main">
 		<h2>상품 등록</h2>
-		<form action="adminWrite.do" method="post" enctype="multipart/form-data" id="write_form">
+		<form action="adminWrite.do" method="post"
+		       enctype="multipart/form-data" id="write_form">
 			<ul>
 				<li>
 					<label>상품표시여부</label>
-					<input type="radio" name="status" value="1" id="status1">미표시
-					<input type="radio" name="status" value="2" id="status2">표시
+					<input type="radio" name="status" value="1"
+					                       id="status1">미표시
+					<input type="radio" name="status" value="2"
+					                       id="status2">표시                       
 				</li>
-				<li>
+				<li>	
 					<label for="name">상품명</label>
-					<input type="text" name="name" id="name" maxlength="10" class="input-check">
+					<input type="text" name="name" id="name"
+					           class="input-check" maxlength="10">
 				</li>
-				<li>
+				<li>	
 					<label for="price">가격</label>
-					<input type="number" name="price" id="price" min="1" max="99999999" class="input-check">
+					<input type="number" name="price" id="price"
+					       class="input-check"
+					       min="1" max="99999999">
 				</li>
-				<li>
+				<li>	
 					<label for="quantity">수량</label>
-					<input type="number" name="quantity" id="quantity" min="0" max="99999" class="input-check"> <%-- 재고가 없을수도 있기 때문에 0 --%>
+					<input type="number" name="quantity" id="quantity"
+					       class="input-check"
+					       min="0" max="99999">
 				</li>
-				<li>
+				<li>	
 					<label for="photo1">상품사진1</label>
-					<input type="file" name="photo1" id="photo1" accept="image/gif,image/png,image/jpeg" class="input-check">
+					<input type="file" name="photo1" id="photo1"
+					        class="input-check"
+					       accept="image/gif,image/png,image/jpeg">
 				</li>
-				<li>
+				<li>	
 					<label for="photo2">상품사진2</label>
-					<input type="file" name="photo2" id="photo2" accept="image/gif,image/png,image/jpeg" class="input-check">
+					<input type="file" name="photo2" id="photo2"
+					       class="input-check"
+					       accept="image/gif,image/png,image/jpeg">
 				</li>
 				<li>
 					<label for="detail">상품설명</label>
-					<textarea rows="5" cols="30" name="detail" id="detail" class="input-check"></textarea>
+					<textarea name="detail" id="detail" 
+					          class="input-check"
+					                  cols="30" rows="5"></textarea>
 				</li>
-			</ul>
-			<div class="align-center">
-				<input type="submit" value="등록">
-				<input type="button" value="목록" onclick="location.href='adminList.do'"> <%-- 대문으로 이동 --%>
-			</div>
+			</ul>       
+		    <div class="align-center">
+		    	<input type="submit" value="등록">
+		    	<input type="button" value="목록"
+		    	       onclick="location.href='adminList.do'">
+		    </div>
 		</form>
 	</div>
 </div>
 </body>
 </html>
+
+
+

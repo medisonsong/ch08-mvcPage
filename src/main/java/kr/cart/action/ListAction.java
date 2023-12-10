@@ -14,27 +14,28 @@ public class ListAction implements Action{
 
 	@Override
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		//로그인 체크
 		HttpSession session = request.getSession();
 		Integer user_num = (Integer)session.getAttribute("user_num");
-		if(user_num==null) {
+		if(user_num == null) {//로그인이 되지 않은 경우
 			return "redirect:/member/loginForm.do";
 		}
-		//로그인이 된 경우
+		//로그인 된 경우
 		CartDAO dao = CartDAO.getInstance();
-		
-		//회원별 총 구매액
+		//회원별 총구매액
 		int all_total = dao.getTotalByMem_num(user_num);
 		
 		List<CartVO> list = null;
 		if(all_total > 0) {
 			list = dao.getListCart(user_num);
 		}
-		
+			
 		request.setAttribute("all_total", all_total);
-		request.setAttribute("list", list);
+		request.setAttribute("list", list);	
 		
 		return "/WEB-INF/views/cart/list.jsp";
 	}
 
 }
+
+
+

@@ -12,7 +12,7 @@ $(function(){
 	let idChecked = 0; //0은 중복체크 미실행 또는 중복, 1은 미중복
 	//아이디 중복체크
 	$('#id_check').click(function(){
-		if(!/^[A-Za-z0-9]{4,12}$/.test($('#id').val())){ // 정규표현식 사용
+		if(!/^[A-Za-z0-9]{4,12}$/.test($('#id').val())){
 			alert('영문 또는 숫자 사용, 최소 4자 ~ 최대 12자를 사용하세요!');
 			$('#id').val('').focus();
 			return false;
@@ -26,35 +26,33 @@ $(function(){
 			success:function(param){
 				if(param.result == 'idNotFound'){
 					idChecked = 1;
-					$('#message_id').css('color', '#000000').text('등록 가능 ID');
+					$('#message_id').css('color','#000000').text('등록 가능 ID');
 				}else if(param.result == 'idDuplicated'){
-					idChecked = 0;
-					$('#message_id').css('color', 'red').text('중복된 ID');
+					idChecked = 0
+					$('#message_id').css('color','red').text('중복된 ID');
 					$('#id').val('').focus();
 				}else{
 					idChecked = 0;
 					alert('아이디 중복체크 오류 발생');
 				}
 			},
-			error:function(param){
+			error:function(){
 				idChecked = 0;
 				alert('네트워크 오류 발생');
 			}
 		});
-	}); //end of click
+	});//end of click
 	
-	
-	//아이디 중복 안내 메시지 초기화 및 아이디 중복 값 초기화
-	$('#register_form #id').keydown(function(){//#id 라고만 명시해도 되고 후손선택자로 #register_form #id라고 명시해도 됨 (그냥 폼에 귀속된걸 강조한거임)
+	//아이디 중복 안내 메시지 초기화 및 아이디 중복 값 초기화')
+	$('#register_form #id').keydown(function(){
 		idChecked = 0;
-		$('#message_id').text(''); // 중복값 체크 안한것처럼 초기화
-	}); //end of keydown
+		$('#message_id').text('');
+	});//end of keydown
 	
-	
-	//회원정보 등록 유효성 체크 (태그 null값)
+	//회원정보 등록 유효성 체크
 	$('#register_form').submit(function(){
 		let items = document.querySelectorAll('.input-check');
-		for(let i=0; i<items.length; i++){
+		for(let i=0;i<items.length;i++){
 			if(items[i].value.trim()==''){
 				let label = document.querySelector('label[for="'+items[i].id+'"]');
 				alert(label.textContent + ' 항목은 필수 입력');
@@ -63,28 +61,29 @@ $(function(){
 				return false;
 			}//end of if
 			
-			if(items[i].id == 'id' && !/^[A-Za-z0-9]{4,12}$/.test($('#id').val())){
+			if(items[i].id == 'id' 
+					     && !/^[A-Za-z0-9]{4,12}$/.test($('#id').val())){
 				alert('영문 또는 숫자 사용, 최소 4자 ~ 최대 12자를 사용하세요!');
 				$('#id').val('').focus();
 				return false;
 			}
 			
-			if(items[i].id == 'id' && idChecked == 0){
-				alert('아이디 중복체크 필수')
+			if(items[i].id =='id' && idChecked==0){
+				alert('아이디 중복체크 필수');
 				return false;
 			}
 			
-			if(items[i].id == 'zipcode' && !/^[0-9]{5}$/.test($('#zipcode').val())){
+			if(items[i].id == 'zipcode' 
+					            && !/^[0-9]{5}$/.test($('#zipcode').val())){
 				alert('우편번호를 입력하세요(숫자5자리)');
 				$('#zipcode').val('').focus();
 				return false;
 			}
-			
-			
-		}//end of for
-	}); //end of submit
 	
-});
+		}//end of for
+	});//end of submit
+	
+});	
 </script>
 </head>
 <body>
@@ -96,47 +95,56 @@ $(function(){
 			<ul>
 				<li>
 					<label for="id">id</label>
-					<input type="text" name="id" id="id" maxlength="12" autocomplete="off" class="input-check">
+					<input type="text" name="id" id="id" maxlength="12"
+					  autocomplete="off" class="input-check">
 					<input type="button" value="ID중복체크" id="id_check">
-					<span id="message_id"></span>
-					<div class="form-notice">*영문 또는 숫자(4자~12자)</div>
+					<span id="message_id"></span> 
+					<div class="form-notice">*영문 또는 숫자(4자~12자)</div> 
 				</li>
 				<li>
 					<label for="name">이름</label>
-					<input type="text" name="name" id="name" maxlength="10" class="input-check">
+					<input type="text" name="name" id="name" maxlength="10"
+					                               class="input-check">
 				</li>
 				<li>
 					<label for="passwd">비밀번호</label>
-					<input type="password" name="passwd" id="passwd" maxlength="12" class="input-check">
+					<input type="password" name="passwd" id="passwd" 
+					    maxlength="12" class="input-check">
 				</li>
 				<li>
 					<label for="phone">전화번호</label>
-					<input type="text" name="phone" id="phone" maxlength="15" class="input-check">
+					<input type="text" name="phone" id="phone" 
+					      maxlength="15" class="input-check">
 				</li>
 				<li>
 					<label for="email">이메일</label>
-					<input type="email" name="email" id="email" maxlength="50" class="input-check">
+					<input type="email" name="email" id="email" 
+					     maxlength="50" class="input-check">
 				</li>
 				<li>
 					<label for="zipcode">우편번호</label>
-					<input type="text" name="zipcode" id="zipcode" maxlength="5" autocomplete="off" class="input-check">
-					<%-- 우편번호 코드 사용 --%>
-					<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+					<input type="text" name="zipcode" id="zipcode" 
+					 maxlength="5" autocomplete="off" class="input-check">
+					<input type="button" onclick="execDaumPostcode()"
+					                                value="우편번호 찾기"> 
 				</li>
 				<li>
 					<label for="address1">주소</label>
-					<input type="text" name="address1" id="address1" maxlength="30" class="input-check">
+					<input type="text" name="address1" id="address1" 
+					  maxlength="30" class="input-check">
 				</li>
 				<li>
 					<label for="address2">나머지 주소</label>
-					<input type="text" name="address2" id="address2" maxlength="30" class="input-check">
+					<input type="text" name="address2" id="address2"
+                       maxlength="30" class="input-check">
 				</li>
 			</ul>
 			<div class="align-center">
 				<input type="submit" value="등록">
-				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
+				<input type="button" value="홈으로"
+				    onclick="${pageContext.request.contextPath}/main/main.do">
 			</div>
-		</form>	
+		</form>
 	</div>
 </div>
 <!-- 우편번호 검색 시작 -->
@@ -239,3 +247,8 @@ $(function(){
 <!-- 우편번호 검색 끝 -->
 </body>
 </html>
+
+
+
+
+

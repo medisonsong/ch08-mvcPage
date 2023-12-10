@@ -52,7 +52,7 @@ public class ListReplyAction implements Action{
 					                page.getEndRow(),
 					                board_num);
 		}else {
-			list = Collections.emptyList(); //전송 시 null이 아닌 비어있는 배열(리스트)를 전달
+			list = Collections.emptyList();
 		}
 		
 		HttpSession session = request.getSession();

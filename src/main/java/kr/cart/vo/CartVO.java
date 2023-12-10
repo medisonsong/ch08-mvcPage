@@ -5,11 +5,11 @@ import java.sql.Date;
 import kr.item.vo.ItemVO;
 
 public class CartVO {
-	private int cart_num;		//장바구니 번호
-	private int item_num;		//상품 번호
-	private int order_quantity;	//주문 수량
+	private int cart_num; 		//장바구니번호
+	private int item_num;		//상품번호
+	private int order_quantity;	//주문수량
 	private Date reg_date;		//장바구니 등록일
-	private int mem_num;		//장바구니에 상품을 담은 회원번호
+	private int mem_num;		//장바구니에 상품을 담은 회원의 회원번호
 	private int sub_total;		//단일 상품의 총구매 비용
 	
 	//상품번호를 가져오긴 했지만 detail 정보를 좀더 활용하기 위해서 ItemVO를 불러올거임

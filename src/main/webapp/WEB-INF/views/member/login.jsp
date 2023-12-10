@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- 다중 if체크라서 choose태그 사용 -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <c:choose>
-	<c:when test="${auth == 1}"> <!-- 정지회원임을 알려줌 --> 
+	<c:when test="${auth == 1}">
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +18,8 @@
 		<div class="result-display">
 			<div class="align-center">
 				정지된 회원 ID입니다.<br>
-				<input type="button" value="홈으로" onclick="location.href='${pageContext.request.contextPath}/main/main.do'">
+				<input type="button" value="홈으로"
+				 onclick="location.href='${pageContext.request.contextPath}/main/main.do'">
 			</div>
 		</div>
 	</div>
@@ -34,4 +34,10 @@
 			history.go(-1);
 		</script>
 	</c:otherwise>
-</c:choose>
+</c:choose>	
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,25 +13,31 @@
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="content-main">
 		<h2>${member.id}의 회원정보 (관리자 전용)</h2>
-		<form action="adminUser.do" method="post" id="detail_form">
-			<input type="hidden" name="mem_num" value="${member.mem_num}">
+		<form action="adminUser.do" method="post" 
+		                                     id="detail_form">
+			<input type="hidden" name="mem_num"
+			                          value="${member.mem_num}">
 			<ul>
 				<li>
-					<label>등급</label> <%-- 관리자를 제외한 회원들의 등급 변경 --%>
-					<c:if test="${member.auth != 9}">
-					<input type="radio" name="auth" value="1" id="auth1" <c:if test="${member.auth==1}">checked</c:if>>정지
-					<input type="radio" name="auth" value="2" id="auth2" <c:if test="${member.auth==2}">checked</c:if>>일반
+					<label>등급</label>
+					<c:if test="${member.auth !=9}">
+					<input type="radio" name="auth" value="1"
+					     id="auth1" <c:if test="${member.auth == 1}">checked</c:if>>정지
+					<input type="radio" name="auth" value="2"
+					     id="auth2" <c:if test="${member.auth == 2}">checked</c:if>>일반     
 					</c:if>
-					<c:if test="${member.auth==9}">
-					<input type="radio" name="auth" value="9" id="auth3" checked>관리 <%--변경은 못하고 관리자다 라는것만 알려줌--%>
+					<c:if test="${member.auth == 9}">
+					<input type="radio" name="auth" value="9"
+					           id="auth3" checked>관리
 					</c:if>
-				</li>
+				</li>	
 			</ul>
 			<div class="align-center">
 				<c:if test="${member.auth != 9}">
 				<input type="submit" value="수정">
 				</c:if>
-				<input type="button" value="목록" onclick="location.href='adminList.do'">
+				<input type="button" value="목록" 
+				          onclick="location.href='adminList.do'">
 			</div>
 			<ul>
 				<li>
@@ -52,6 +58,9 @@
 			</ul>
 		</form>
 	</div>
-</div>
+</div>	
 </body>
 </html>
+
+
+

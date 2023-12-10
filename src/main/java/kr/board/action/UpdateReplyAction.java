@@ -19,7 +19,7 @@ public class UpdateReplyAction implements Action{
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		//전송된 데이터 인코딩 처리
 		request.setCharacterEncoding("utf-8");
-		//댓글 번호 반환 받기
+		//댓글 번호
 		int re_num = Integer.parseInt(request.getParameter("re_num"));
 		
 		BoardDAO dao = BoardDAO.getInstance();
@@ -29,14 +29,13 @@ public class UpdateReplyAction implements Action{
 		Integer user_num = (Integer)session.getAttribute("user_num");
 		
 		Map<String,String> mapAjax = new HashMap<String,String>();
-		
 		if(user_num == null) {//로그인이 되지 않은 경우
 			mapAjax.put("result", "logout");
-		}else if(user_num != null && user_num == db_reply.getMem_num()) {
-			//로그인한 회원번호와 작성자 회원번호가 일치
-			//자바빈 생성
+		}else if(user_num != null 
+				&& user_num == db_reply.getMem_num()) {
+			//로그인한 회원번호와 작성자 회원번호 일치
+			//자바빈(VO) 생성
 			BoardReplyVO reply = new BoardReplyVO();
-			//자바빈에 데이터 담기
 			reply.setRe_num(re_num);
 			reply.setRe_content(request.getParameter("re_content"));
 			reply.setRe_ip(request.getRemoteAddr());
@@ -44,8 +43,7 @@ public class UpdateReplyAction implements Action{
 			dao.updateReplayBoard(reply);
 			
 			mapAjax.put("result", "success");
-		}else {
-			//로그인한 회원번호와 작성자 회원번호 불일치
+		}else {//로그인한 회원번호와 작성자 회원번호 불일치
 			mapAjax.put("result", "wrongAccess");
 		}
 		//JSON 문자열 변환
@@ -58,3 +56,6 @@ public class UpdateReplyAction implements Action{
 	}
 
 }
+
+
+

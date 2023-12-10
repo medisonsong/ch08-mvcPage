@@ -9,10 +9,10 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
 $(function(){
-	//회원정보 수정 유효성 체크 
+	//회원정보 수정 유효성 체크
 	$('#modify_form').submit(function(){
 		let items = document.querySelectorAll('.input-check');
-		for(let i=0; i<items.length; i++){
+		for(let i=0;i<items.length;i++){
 			if(items[i].value.trim()==''){
 				let label = document.querySelector('label[for="'+items[i].id+'"]');
 				alert(label.textContent + ' 항목은 필수 입력');
@@ -21,15 +21,17 @@ $(function(){
 				return false;
 			}//end of if
 			
-			if(items[i].id == 'zipcode' && !/^[0-9]{5}$/.test($('#zipcode').val())){
+			if(items[i].id == 'zipcode' 
+					            && !/^[0-9]{5}$/.test($('#zipcode').val())){
 				alert('우편번호를 입력하세요(숫자5자리)');
 				$('#zipcode').val('').focus();
 				return false;
 			}
-		}//end of for
-	}); //end of submit
 	
-});
+		}//end of for
+	});//end of submit
+	
+});	
 </script>
 </head>
 <body>
@@ -41,36 +43,48 @@ $(function(){
 			<ul>
 				<li>
 					<label for="name">이름</label>
-					<input type="text" name="name" id="name" maxlength="10" value="${member.name}" class="input-check">
+					<input type="text" name="name" id="name" maxlength="10"
+					    value="${member.name}" class="input-check">
 				</li>
 				<li>
 					<label for="phone">전화번호</label>
-					<input type="text" name="phone" id="phone" maxlength="15" value="${member.phone}" class="input-check">
+					<input type="text" name="phone" id="phone" 
+					      value="${member.phone}"
+					      maxlength="15" class="input-check">
 				</li>
 				<li>
 					<label for="email">이메일</label>
-					<input type="email" name="email" id="email" value="${member.email}" maxlength="50" class="input-check">
+					<input type="email" name="email" id="email"
+						 value="${member.email}" 
+					     maxlength="50" class="input-check">
 				</li>
 				<li>
 					<label for="zipcode">우편번호</label>
-					<input type="text" name="zipcode" id="zipcode" value="${member.zipcode}" maxlength="5" autocomplete="off" class="input-check">
-					<%-- 우편번호 코드 사용 --%>
-					<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+					<input type="text" name="zipcode" id="zipcode" 
+					  value="${member.zipcode}"
+					 maxlength="5" autocomplete="off" class="input-check">
+					<input type="button" onclick="execDaumPostcode()"
+					                                value="우편번호 찾기"> 
 				</li>
 				<li>
 					<label for="address1">주소</label>
-					<input type="text" name="address1" id="address1" value="${member.address1}" maxlength="30" class="input-check">
+					<input type="text" name="address1" id="address1" 
+					  value="${member.address1}"
+					  maxlength="30" class="input-check">
 				</li>
 				<li>
 					<label for="address2">나머지 주소</label>
-					<input type="text" name="address2" id="address2" value="${member.address2}" maxlength="30" class="input-check">
+					<input type="text" name="address2" id="address2"
+					   value="${member.address2}"
+                       maxlength="30" class="input-check">
 				</li>
 			</ul>
 			<div class="align-center">
 				<input type="submit" value="수정">
-				<input type="button" value="홈으로" onclick="${pageContext.request.contextPath}/main/main.do">
+				<input type="button" value="홈으로"
+				    onclick="${pageContext.request.contextPath}/main/main.do">
 			</div>
-		</form>	
+		</form>
 	</div>
 </div>
 <!-- 우편번호 검색 시작 -->
@@ -173,3 +187,8 @@ $(function(){
 <!-- 우편번호 검색 끝 -->
 </body>
 </html>
+
+
+
+
+
