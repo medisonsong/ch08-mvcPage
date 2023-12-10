@@ -359,3 +359,8 @@ input[type="number"].quantity-width{
 	color:red;
 }
 
+/* 장바구니
+------------------------------*/
+form[id="cart_order"]{
+	border:none;
+}
