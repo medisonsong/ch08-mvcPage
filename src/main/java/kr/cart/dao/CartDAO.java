@@ -89,7 +89,7 @@ public class CartDAO {
 			//커넥션풀로부터 커넥션 할당
 			conn = DBUtil.getConnection();
 			//SQL문 작성
-			sql = "SELECT * FROM zcart JOin zitem USING(item_num) "
+			sql = "SELECT * FROM zcart JOIN zitem USING(item_num) "
 				+ "WHERE mem_num = ? ORDER BY item_num ASC";
 			//PreparedStatement 객체 생성
 			pstmt = conn.prepareStatement(sql);
