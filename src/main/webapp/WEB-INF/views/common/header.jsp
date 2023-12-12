@@ -13,7 +13,6 @@
 		<li>
 			<a href="${pageContext.request.contextPath}/item/itemList.do">상품목록</a>
 		</li>
-		
 		<%-- 관리자로만 로그인해야 보여지는 header 시작 --%>
 		<c:if test="${!empty user_num && user_auth ==9}">
 			<li>
