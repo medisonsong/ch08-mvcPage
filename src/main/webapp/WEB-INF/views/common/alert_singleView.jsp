@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
 <script type="text/javascript">
 	alert('${notice_msg}');
-	location.href='${notice.url}';
+	location.href='${notice_url}';
 </script>
