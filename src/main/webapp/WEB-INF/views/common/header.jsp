@@ -21,6 +21,9 @@
 			<li>
 				<a href="${pageContext.request.contextPath}/item/adminList.do">상품관리</a>
 			</li>
+			<li>
+			<a href="${pageContext.request.contextPath}/order/adminList.do">주문관리</a>
+			</li>
 		</c:if>
 		<%-- 관리자로만 로그인해야 보여지는 header 끝 --%>
 		

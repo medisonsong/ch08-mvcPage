@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>배송지정보 수정</title>
+<title>[관리자]배송지정보 수정</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <c:if test="${order.status == 1}">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
@@ -13,15 +13,15 @@
 $(function(){
 	//이벤트 연결
 	$('#order_modify').submit(function(){
-		let items = document.querySelectorAll('input[type="text"]'); //남기실말씀 제외하고 모두
-		for(let i=0; i<items.length; i++){
+		let items = document.querySelectorAll('input[type="text"]');
+		for(let i=0;i<items.length;i++){
 			if(items[i].value.trim()==''){
 				let label = document.querySelector('label[for="'+items[i].id+'"]');
 				alert(label.textContent + ' 항목은 필수 입력');
 				items[i].value = '';
 				items[i].focus();
 				return false;
-			}			
+			}
 		}//end of for
 	});
 });
@@ -32,46 +32,55 @@ $(function(){
 <div class="page-main">
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="content-main">
-		<h2>배송지정보 수정</h2>
+		<h2>[관리자]배송지정보 수정</h2>
 		<c:if test="${order.status != 1}">
 		<div class="result-display">
 			배송대기일 때만 배송지정보를 수정할 수 있습니다.
 		</div>
 		</c:if>
 		<c:if test="${order.status == 1}">
-		<form id="order_modify" action="orderModify.do" method="post">
+		<form id="order_modify" action="modify.do" method="post">
 			<input type="hidden" name="order_num" value="${order.order_num}">
 			<ul>
 				<li>
 					<label for="receive_name">받는 사람</label>
-					<input type="text" name="receive_name" id="receive_name" value="${order.receive_name}" maxlength="10" class="input-check">
+					<input type="text" name="receive_name" id="receive_name" 
+						value="${order.receive_name}" maxlength="10">
 				</li>
 				<li>
 					<label for="zipcode">우편번호</label>
-					<input type="text" name="receive_post" id="zipcode" value="${order.receive_post}" maxlength="5">
-					<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기">
+					<input type="text" name="receive_post" id="zipcode" 
+					    value="${order.receive_post}" maxlength="5">
+					<input type="button" onclick="execDaumPostcode()"
+					                                value="우편번호 찾기">    
 				</li>
 				<li>
 					<label for="address1">주소</label>
-					<input type="text" name="receive_address1" value="${order.receive_address1}" id="address1" maxlength="30">
+					<input type="text" name="receive_address1" 
+					   value="${order.receive_address1}"
+					   id="address1" maxlength="30">
 				</li>
 				<li>
 					<label for="address2">상세주소</label>
-					<input type="text" name="receive_address2" value="${order.receive_address2}" id="address2" maxlength="30">
+					<input type="text" name="receive_address2" 
+					     value="${order.receive_address2}"
+					     id="address2" maxlength="30">
 				</li>
 				<li>
 					<label for="receive_phone">전화번호</label>
-					<input type="text" name="receive_phone" id="receive_phone" value="${order.receive_phone}" maxlength="15">
+					<input type="text" name="receive_phone" 
+					   value="${order.receive_phone}"
+					  id="receive_phone" maxlength="15">
 				</li>
 				<li>
 					<label for="notice">남기실 말씀</label>
-					<textarea rows="5" cols="30" name="notice" id="notice">${order.notice}</textarea>
+					<textarea rows="5" cols="30" name="notice"
+					   id="notice">${order.notice}</textarea>
 				</li>
 			</ul>
 			<div class="align-center">
-				<input type="submit" value="주문 수정">
-				<input type="button" value="MY페이지" onclick="location.href='${pageContext.request.contextPath}/member/myPage.do'">
-				<input type="button" value="주문목록" onclick="location.href='orderList.do'">
+				<input type="submit" value="배송지 수정">
+				<input type="button" value="주문목록" onclick="location.href='adminList.do'">    
 			</div>
 		</form>
 		</c:if>

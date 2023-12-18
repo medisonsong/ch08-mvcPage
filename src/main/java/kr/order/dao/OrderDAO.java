@@ -130,10 +130,99 @@ public class OrderDAO {
 	
 	
 	//관리자 - 전체 주문 개수/검색 주문 개수
+	public int getOrderCount(String keyfield, String keyword)
+	                                         throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		String sub_sql = "";
+		int count = 0;
+		
+		try {
+			//커넥션풀로부터 커넥션을 할당
+			conn = DBUtil.getConnection();
+			
+			if(keyword != null && !"".equals(keyword)) {
+				if(keyfield.equals("1")) sub_sql += "WHERE order_num = ?";
+				else if(keyfield.equals("2")) sub_sql += "WHERE id LIKE '%' || ? || '%'";
+				else if(keyfield.equals("3")) sub_sql += "WHERE item_name LIKE '%' || ? || '%'";
+			}
+			//SQL문 작성
+			sql = "SELECT COUNT(*) FROM zorder JOIN zmember USING(mem_num) " + sub_sql;
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			if(keyword != null && !"".equals(keyword)) {
+				pstmt.setString(1, keyword);
+			}
+			//SQL문 실행
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}			
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(rs, pstmt, conn);
+		}		
+		return count;
+	}
 	//관리자 - 전체 주문 목록/검색 주문 목록
-	
-	
-	
+	public List<OrderVO> getListOrder(int start, int end,
+			                    String keyfield, String keyword)
+	                            throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<OrderVO> list = null;
+		String sql = null;
+		String sub_sql = "";
+		int cnt = 0;
+		
+		try {
+			//커넥션풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			
+			if(keyword != null && !"".equals(keyword)) {
+				if(keyfield.equals("1")) sub_sql += "WHERE order_num = ?";
+				else if(keyfield.equals("2")) sub_sql += "WHERE id LIKE '%' || ? || '%'";
+				else if(keyfield.equals("3")) sub_sql += "WHERE item_name LIKE '%' || ? || '%'";
+			}
+			//SQL문 작성
+			sql = "SELECT * FROM (SELECT a.*, rownum rnum FROM "
+				+ "(SELECT * FROM zorder JOIN zmember USING(mem_num) " + sub_sql
+				+ " ORDER BY order_num DESC)a) WHERE rnum >= ? AND rnum <= ?";
+			//PreparedStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			if(keyword != null && !"".equals(keyword)) {
+				pstmt.setString(++cnt, keyword);
+			}
+			pstmt.setInt(++cnt, start);
+			pstmt.setInt(++cnt, end);
+			//SQL문 실행
+			rs = pstmt.executeQuery();
+			
+			list = new ArrayList<OrderVO>();
+			while(rs.next()) {
+				OrderVO order = new OrderVO();
+				order.setOrder_num(rs.getInt("order_num"));
+				order.setItem_name(rs.getString("item_name"));
+				order.setOrder_total(rs.getInt("order_total"));
+				order.setStatus(rs.getInt("status"));
+				order.setReg_date(rs.getDate("reg_date"));
+				order.setId(rs.getString("id"));
+				
+				list.add(order);				
+			}			
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(rs, pstmt, conn);
+		}		
+		return list;
+	}
 	
 	//사용자 - 전체 주문 개수/검색 주문 개수
 	public int getOrderCountByMem_num(String keyfield, String keyword, int mem_num)throws Exception{
@@ -372,6 +461,68 @@ public class OrderDAO {
 			DBUtil.executeClose(null, pstmt, conn);
 		}
 	}
+	
+	
+	
+	
+	//관리자 - 배송상태 수정
+	public void updateOrderStatus(OrderVO order)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		String sql = null;
+		
+		try {
+			//커넥션 풀로부터 커넥션 할당
+			conn = DBUtil.getConnection();
+			//오토커밋 해제
+			conn.setAutoCommit(false);
+
+			//1. 배송상태 수정
+			//SQL문 작성
+			sql="UPDATE zorder SET status=?,modify_date=SYSDATE WHERE order_num=?";
+			//PrepardStatement 객체 생성
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			pstmt.setInt(1, order.getStatus());
+			pstmt.setInt(2, order.getOrder_num());
+			//SQL문 실행
+			pstmt.executeUpdate();
+			
+			
+			//2. 주문취소일 경우만 상품개수 조정
+			//조건체크 후 sql문 실행
+			if(order.getStatus()==5) {
+				//주문번호에 해당하는 상품정보 구하기
+				List<OrderDetailVO> detailList = getListOrderDetail(order.getOrder_num());
+				//SQL문 작성
+				sql = "UPDATE zitem SET quantity=quantity+? WHERE item_num=?";
+				pstmt2 = conn.prepareStatement(sql);
+				for(int i=0;i<detailList.size();i++) {
+					OrderDetailVO detail = detailList.get(i);
+					pstmt2.setInt(1, detail.getOrder_quantity());
+					pstmt2.setInt(2, detail.getItem_num());
+					pstmt2.addBatch();
+					
+					if(i%1000==0) {
+						pstmt2.executeBatch();
+					}
+				}//end of for
+				pstmt2.executeBatch();
+			}//end of if
+
+			//모든 SQL문 성공하면
+			conn.commit();
+		}catch(Exception e) {
+			conn.rollback();
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt2, null);
+			DBUtil.executeClose(null, pstmt, conn);
+		}
+	}
+	
+	
 	
 	
 	
