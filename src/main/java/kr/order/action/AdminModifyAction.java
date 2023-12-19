@@ -27,8 +27,22 @@ public class AdminModifyAction implements Action{
 		//전송된 데이터 인코딩 처리
 		request.setCharacterEncoding("utf-8");
 		
+		//배송지 변경 시 갑자기 주문취소가 될 수도 있기 때문에 정보처리 전 조건체크
+		int order_num = Integer.parseInt(request.getParameter("order_num"));
+		OrderDAO orderDao = OrderDAO.getInstance();
+		OrderVO db_order = orderDao.getOrder(order_num);
+		if(db_order.getStatus()>1) {
+			//관리자가 주문정보를 수정하기 전에 사용자가 배송상태를 주문취소로 변경
+			//->배송지정보 수정 불가능
+			request.setAttribute("notice_msg", "사용자가 배송상태를 변경해서 관리자가 배송지 정보를 수정할 수 없음");
+			request.setAttribute("notice_url", request.getContextPath()+"/order/adminDetail.do?order_num="+order_num);
+			return "/WEB-INF/views/common/alert_singleView.jsp";
+		}
+		
+		
+		
 		OrderVO order = new OrderVO();
-		order.setOrder_num(Integer.parseInt(request.getParameter("order_num")));
+		order.setOrder_num(order_num); //위에서 이미 명시했기 때문에 그냥 씀
 		order.setReceive_name(request.getParameter("receive_name"));
 		order.setReceive_post(request.getParameter("receive_post"));
 		order.setReceive_address1(request.getParameter("receive_address1"));
@@ -36,7 +50,7 @@ public class AdminModifyAction implements Action{
 		order.setReceive_phone(request.getParameter("receive_phone"));
 		order.setNotice(request.getParameter("notice"));
 		
-		OrderDAO orderDao = OrderDAO.getInstance();
+		//배송지정보 수정
 		orderDao.updateOrder(order);
 		
 		request.setAttribute("notice_msg", "정상적으로 수정되었습니다.");

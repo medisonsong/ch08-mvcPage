@@ -69,7 +69,7 @@ $(function(){
 				</li>
 			</ul>
 			<div class="align-center">
-				<input type="submit" value="주문 수정">
+				<input type="submit" value="배송지 수정">
 				<input type="button" value="MY페이지" onclick="location.href='${pageContext.request.contextPath}/member/myPage.do'">
 				<input type="button" value="주문목록" onclick="location.href='orderList.do'">
 			</div>

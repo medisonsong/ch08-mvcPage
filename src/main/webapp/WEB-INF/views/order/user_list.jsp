@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품관리</title>
+<title>구매 목록</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <script type="text/javascript">
 window.onload=function(){
@@ -20,7 +20,17 @@ window.onload=function(){
 			keyword.focus();
 			return false;
 		}
+		
+		//주문번호 - 숫자로만
+		let keyfield = document.getElementById('keyfield');
+		if(keyfield.value == 1 && isNaN(keyword.value)){
+			alert('주문번호는 숫자만 입력하세요!');
+			keyword.value='';
+			keyword.focus();
+			return false;
+		}
 	};
+	
 };
 </script>
 </head>
@@ -28,13 +38,13 @@ window.onload=function(){
 <div class="page-main">
 	<jsp:include page="/WEB-INF/views/common/header.jsp"/>
 	<div class="content-main">
-		<h2>상품관리</h2>
-		<form action="adminList.do" method="get" id="search_form">
+		<h2>구매 목록</h2>
+		<form action="orderList.do" method="get" id="search_form">
 			<ul class="search">
 				<li>
 					<select name="keyfield" id="keyfield">
-						<option value="1" <c:if test="${param.keyfield == 1}">selected</c:if>>상품명</option>
-						<option value="2" <c:if test="${param.keyfield == 2}">selected</c:if>>내용</option>
+						<option value="1" <c:if test="${param.keyfield == 1}">selected</c:if>>주문번호</option>
+						<option value="2" <c:if test="${param.keyfield == 2}">selected</c:if>>상품명</option>
 					</select>
 				</li>
 				<li>
@@ -46,35 +56,35 @@ window.onload=function(){
 			</ul>
 		</form>
 		<div class="list-space align-right">
-			<input type="button" value="상품등록" onclick="location.href='adminWriteForm.do'">
-			<input type="button" value="목록" onclick="location.href='adminList.do'">
+			<input type="button" value="목록" onclick="location.href='orderList.do'">
 			<input type="button" value="홈으로" onclick="location.href='${pageContext.request.contextPath}/main/main.do'">          
 		</div>
 		<c:if test="${count == 0}">
 		<div class="result-display">
-			표시할 상품이 없습니다.
+			표시할 주문 내역이 없습니다.
 		</div>
 		</c:if>
 		<c:if test="${count > 0}">
 		<table>
 			<tr>
-				<th>번호</th>
+				<th>주문번호</th>
 				<th>상품명</th>
-				<th>가격</th>
-				<th>재고수</th>
-				<th>등록일</th>
+				<th>총구매금액</th>
+				<th>주문날짜</th>
 				<th>상태</th>
 			</tr>
-			<c:forEach var="item" items="${list}">
+			<c:forEach var="order" items="${list}">
 			<tr>
-				<td><a href="adminModifyForm.do?item_num=${item.item_num}">${item.item_num}</a></td>
-				<td>${item.name}</td>
-				<td><fmt:formatNumber value="${item.price}"/>원</td>
-				<td><fmt:formatNumber value="${item.quantity}"/></td>
-				<td>${item.reg_date}</td>
+				<td><a href="orderDetail.do?order_num=${order.order_num}">${order.order_num}</a></td>
+				<td>${order.item_name}</td>
+				<td><fmt:formatNumber value="${order.order_total}"/>원</td>
+				<td>${order.reg_date}</td>
 				<td>
-					<c:if test="${item.status == 1}">미표시</c:if>
-					<c:if test="${item.status == 2}">표시</c:if>
+					<c:if test="${order.status == 1}">배송대기</c:if>
+					<c:if test="${order.status == 2}">배송준비중</c:if>
+					<c:if test="${order.status == 3}">배송중</c:if>
+					<c:if test="${order.status == 4}">배송완료</c:if>
+					<c:if test="${order.status == 5}">주문취소</c:if>
 				</td>
 			</tr>	
 			</c:forEach>
@@ -85,7 +95,3 @@ window.onload=function(){
 </div>
 </body>
 </html>
-
-
-
-

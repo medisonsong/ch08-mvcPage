@@ -52,7 +52,7 @@ public class UserModifyAction implements Action{
 		dao.updateOrder(order);
 		
 		request.setAttribute("notice_msg", "정상적으로 수정되었습니다.");
-		request.setAttribute("notice_url", request.getContextPath()+"/order/orderModifyForm.do?order_num="+order_num);
+		request.setAttribute("notice_url", request.getContextPath()+"/order/orderDetail.do?order_num="+order_num);
 		
 		return "/WEB-INF/views/common/alert_singleView.jsp";
 	}

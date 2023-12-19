@@ -78,8 +78,7 @@ $(function(){
 			<div class="align-center">
 				본 상품은 판매 중지되었습니다.
 				<p>
-				<input type="button" value="판매상품 보기" 
-				    onclick="location.href='itemList.do'">
+				<input type="button" value="판매상품 보기" onclick="location.href='itemList.do'">
 			</div>
 		</div>
 		</c:if>
@@ -90,20 +89,16 @@ $(function(){
 		</div>
 		<div class="item-detail">
 			<form id="item_cart">
-				<input type="hidden" name="item_num" 
-				               value="${item.item_num}" id="item_num">
-				<input type="hidden" name="item_price"
-				               value="${item.price}" id="item_price">
-				<input type="hidden" name="item_quantity"
-				               value="${item.quantity}" id="item_quantity">
+				<input type="hidden" name="item_num" value="${item.item_num}" id="item_num">
+				<input type="hidden" name="item_price" value="${item.price}" id="item_price">
+				<input type="hidden" name="item_quantity" value="${item.quantity}" id="item_quantity">
 				<ul>
 					<li>가격 : <b><fmt:formatNumber value="${item.price}"/>원</b></li>
 					<li>재고 : <span><fmt:formatNumber value="${item.quantity}"/></span></li>
 					<c:if test="${item.quantity > 0}">
 					<li>
 						<label for="order_quantity">구매수량</label>
-						<input type="number" name="order_quantity" 
-						  min="1" max="${item.quantity}" autocomplete="off"
+						<input type="number" name="order_quantity" min="1" max="${item.quantity}" autocomplete="off"
 						  id="order_quantity" class="quantity-width">
 					</li>
 					<li>
