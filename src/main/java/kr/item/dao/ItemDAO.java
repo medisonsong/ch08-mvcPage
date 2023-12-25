@@ -51,7 +51,92 @@ public class ItemDAO {
 		}
 	}
 	//관리자 - 상품 수정
+	public void updateItem(ItemVO item)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		String sub_sql = "";
+		int cnt = 0;
+		
+		try {
+			conn = DBUtil.getConnection();
+			
+			if(item.getPhoto1()!=null) {
+				sub_sql += ",photo1=?";
+			}
+			if(item.getPhoto2()!=null) {
+				sub_sql += ",photo2=?";
+			}
+			
+			sql = "UPDATE zitem SET name=?,price=?,quantity=?,detail=?,modify_date=SYSDATE,status=?" + sub_sql + " WHERE item_num=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			//?에 데이터 바인딩
+			pstmt.setString(++cnt, item.getName());
+			pstmt.setInt(++cnt, item.getPrice());
+			pstmt.setInt(++cnt, item.getQuantity());
+			pstmt.setString(++cnt, item.getDetail());
+			pstmt.setInt(++cnt, item.getStatus());
+			if(item.getPhoto1() != null) {
+				pstmt.setString(++cnt, item.getPhoto1());
+			}
+			if(item.getPhoto2() != null) {
+				pstmt.setString(++cnt, item.getPhoto2());
+			}
+			pstmt.setInt(++cnt, item.getItem_num());
+			//SQL문 실행
+			pstmt.executeUpdate();			
+		}catch(Exception e) {
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt, conn);
+		}
+		
+	}
+	
+	
+	
+	
 	//관리자 - 상품 삭제
+	public void deleteItem(int item_num)throws Exception{
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		String sql = null;
+		
+		try {
+			//커넥션풀로부터 커넥션을 할당
+			conn = DBUtil.getConnection();
+			//오토커밋 해제
+			conn.setAutoCommit(false);
+			
+			//장바구니에 저장된 상품 삭제
+			sql = "DELETE FROM zcart WHERE item_num=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, item_num);
+			pstmt.executeUpdate();
+			
+			//상품 테이블에서 상품 삭제
+			sql = "DELETE FROM zitem WHERE item_num=?";
+			pstmt2 = conn.prepareStatement(sql);
+			pstmt2.setInt(1, item_num);
+			pstmt2.executeUpdate();
+			
+			//모든 SQL문이 성공하면
+			conn.commit();			
+		}catch(Exception e) {
+			//SQL문이 하나라도 실패하면
+			conn.rollback();
+			throw new Exception(e);
+		}finally {
+			DBUtil.executeClose(null, pstmt2, null);
+			DBUtil.executeClose(null, pstmt, conn);
+		}
+	}
+	
+	
+	
+	
 	//관리자/사용자 - 전체 상품 개수/검색 상품 개수
 	public int getItemCount(String keyfield,String keyword,
 			                int status)throws Exception{
