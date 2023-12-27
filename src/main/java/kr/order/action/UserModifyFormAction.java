@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import kr.controller.Action;
 import kr.order.dao.OrderDAO;
-import kr.order.vo.OrderDetailVO;
 import kr.order.vo.OrderVO;
 
 public class UserModifyFormAction implements Action{
